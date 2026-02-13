@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    font-family:'Courier New', monospace;
+}
+
+/* STRIPES BACKGROUND */
+.bg{
+    background: repeating-linear-gradient(
+        90deg,
+        #cfe3f1,
+        #cfe3f1 40px,
+        #e9f4fb 40px,
+        #e9f4fb 80px
+    );
+}
+
+/* PAGE SETUP */
+.page{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+/* PAGE 1 */
+#page1{
+    flex-direction:row;
+    gap:40px;
+}
+
+.title{
+    font-family:'Playfair Display', serif;
+    font-size:55px;
+    letter-spacing:4px;
+    color:#2f3e55;
+    text-shadow:0 0 15px rgba(111,168,220,0.6);
+    animation:fadeUp 1.5s ease forwards;
+}
+
+.subClick{
+    font-size:14px;
+    margin-top:10px;
+    color:#4a6fa5;
+    opacity:0;
+    animation:fadeUp 2s ease forwards;
+    animation-delay:1s;
+}
+
+.snoopyBtn{
+    width:260px;
+    cursor:pointer;
+    transition:0.4s;
+}
+
+.snoopyBtn:hover{
+    transform:scale(1.07) rotate(-2deg);
+}
+
+/* PAGE 2 */
+#page2{
+    display:none;
+    background:url('typewriter.png') no-repeat center;
+    background-size:contain;
+}
+
+.letterText{
+    position:absolute;
+    top:26%;
+    left:54%;
+    transform:translateX(-50%);
+    width:28%;
+    height:38%;
+    font-size:12px;
+    line-height:1.8;
+    color:#2f3e55;
+    white-space:pre-line;
+}
+
+.btn{
+    position:absolute;
+    top:20px;
+    left:20px;
+    background:#4a6fa5;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.nextBtn{
+    left:auto;
+    right:20px;
+}
+
+/* PAGE 3 */
+#page3{
+    display:none;
+    flex-direction:column;
+    text-align:center;
+}
+
+.thankTitle{
+    font-family:'Playfair Display', serif;
+    font-size:70px;
+    letter-spacing:6px;
+    color:#2f3e55;
+    text-shadow:0 0 20px rgba(111,168,220,0.7);
+    animation:fadeUp 1.5s ease forwards;
+}
+
+.thankSub{
+    margin-top:15px;
+    font-size:16px;
+    color:#4a6fa5;
+    animation:fadeUp 2s ease forwards;
+}
+
+/* ANIMATION */
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* FALLING HEARTS */
+.heart{
+    position:fixed;
+    top:-10px;
+    font-size:20px;
+    animation:fall linear forwards;
+    opacity:0.8;
+    pointer-events:none;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh);
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+
+<body class="bg">
+
+<audio id="music" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+    <img src="snoopy-envelope.png" class="snoopyBtn" onclick="openLetter()">
+    <div>
+        <div class="title">Happy Valentine</div>
+        <div class="subClick">coba klik snoopy nya!</div>
+    </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <button class="btn" onclick="goHome()">Back</button>
+    <button class="btn nextBtn" onclick="goThank()">Next</button>
+    <div class="letterText" id="typed"></div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page bg" id="page3">
+    <div class="thankTitle">Thank You</div>
+    <div class="thankSub">hope you smiled a little</div>
+    <button class="btn" style="top:30px;" onclick="goHome()">Back Home</button>
+</div>
+
+<script>
+
+/* MUSIC + PAGE */
+const music=document.getElementById("music");
+
+function openLetter(){
+    document.getElementById("page1").style.display="none";
+    document.getElementById("page2").style.display="flex";
+    music.play();
+    startTyping();
+}
+
+function goThank(){
+    document.getElementById("page2").style.display="none";
+    document.getElementById("page3").style.display="flex";
+}
+
+function goHome(){
+    location.reload();
+}
+
+/* TYPING */
+const text=`happy valentineee, btww gimana tiramisu nyaa? enak gaa? makasih ya udah ladenin aku dari kemaren padahal belom tau aku siapa.
+
+cerita dikit ya, pertama kali tau kamu dari kilau terus kaya senyum kamu maniss banget wkwkwk, itu semester 1 sih udah lama, terus baru berani gerak sekarang.
+
+Kamu kaya punya pribadi yang unik, yang bikin aku penasaran, semoga kita bisa kenal lebih dalam ya... streak tiktok mungkin? @archivee`;
+
+let i=0;
+let started=false;
+
+function startTyping(){
+    if(started) return;
+    started=true;
+    typeWriter();
+}
+
+function typeWriter(){
+    if(i<text.length){
+        document.getElementById("typed").innerHTML+=text.charAt(i);
+        i++;
+        setTimeout(typeWriter,25);
+    }
+}
+
+/* FALLING HEARTS */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="♡";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(15+Math.random()*25)+"px";
+    heart.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>{heart.remove();},7000);
+}
+setInterval(createHeart,500);
+
+</script>
+
+</body>
+</html>
